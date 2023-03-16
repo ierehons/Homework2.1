@@ -6,40 +6,36 @@ import java.util.regex.Pattern;
 import static transport.ValidateUtils.validateBoolean;
 import static transport.ValidateUtils.validateString;
 
-public class Car {
-    final String brand;
-    final String model;
-    final int year;
-    final String country;
+public class Car extends Transport {
+
     final String bodyType;
     final int numberOfSeats;
     private double engineVolume;
-    private String color;
+
     private String transmission;
     private String registrationNumber;
     private boolean isSummerRubber;
 
     private Key key;
 
-// конструктор
+
+    // конструктор
     public Car(String brand,
                String model,
-               double engineVolume,
-               String color,
                Integer year,
                String country,
-               String transmission,
-               String bodyType,
-               String registrationNumber,
-               int numberOfSeats,
-               boolean isSummerRubber,
-               Key key) {
-        this.brand = validateCarParameters(brand);
-        this.model = validateCarParameters(model);
+               String color,
+               Integer speedMax,
+               double engineVolume,
+        String transmission,
+        String bodyType,
+        String registrationNumber,
+        int numberOfSeats,
+        boolean isSummerRubber,
+        Key key) {
+
+        super (brand, model, year, country, color, speedMax);
         this.engineVolume = validateEngineVolume(engineVolume);
-        this.color = validateColor(color);
-        this.year = validateYar(year);
-        this.country = validateCountry(country);
         this.transmission = validateTransmission(transmission);
         this.bodyType = validateCarParameters(bodyType);
         this.registrationNumber = registrationNumber;
@@ -48,14 +44,10 @@ public class Car {
         this.key = key;
     }
 
-// гетеры и сеттеры
-    public String getBrand() {
-        return brand;
-    }
 
-    public String getModel() {
-        return model;
-    }
+
+    // гетеры и сеттеры
+
 
     public double getEngineVolume() {
         return engineVolume;
@@ -63,22 +55,6 @@ public class Car {
 
     public void setEngineVolume(double engineVolume) {
         this.engineVolume = validateEngineVolume(engineVolume);
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = validateColor(color);
-    }
-
-    public int getYear() {
-        return year;
-    }
-
-    public String getCountry() {
-        return country;
     }
 
     public String getTransmission() {
@@ -121,7 +97,7 @@ public class Car {
         return key;
     }
 
-// замена покрышек от времени года
+    // замена покрышек от времени года
     public void changeTyres(int month) {
         if ((month >= 11 && month <= 12) || (month >= 1 && month <= 3)) {
             isSummerRubber = false;
@@ -130,7 +106,8 @@ public class Car {
             isSummerRubber = true;
         }
     }
-// проверка номера машины
+
+    // проверка номера машины
     public String validateCarNumber(String number) {
         if (Pattern.matches("[а-я][0-9]{3}[а-я]{2}[0-9]{3}", number)) {
             return number;
@@ -140,16 +117,25 @@ public class Car {
         }
     }
 
-    public  int validateNumberOfSeats (int numberOfSeats) {
-        return numberOfSeats <= 0 ? 4 : numberOfSeats;}
-    public static String validateCountry (String value) {
-        return validateString(value, "Rus");}
-    public static double validateEngineVolume (double value) {return value <= 0 ? 1.5: value;}
-    public static int validateYar (Integer value) {return value == null || value<=1900 ? 2000 : value;}
-    public static String validateCarParameters (String value) {return value == null ? "не указано" : value;}
-    public static String validateColor (String value) {return validateString(value, "Белый");}
-    public static String validateTransmission (String value) {return validateString(value, "автомат");}
+    public int validateNumberOfSeats(int numberOfSeats) {
+        return numberOfSeats <= 0 ? 4 : numberOfSeats;
+    }
 
+    public static String validateCountry(String value) {
+        return validateString(value, "Rus");
+    }
+
+    public static double validateEngineVolume(double value) {
+        return value <= 0 ? 1.5 : value;
+    }
+
+    public static String validateCarParameters(String value) {
+        return value == null ? "не указано" : value;
+    }
+
+    public static String validateTransmission(String value) {
+        return validateString(value, "автомат");
+    }
 
 
     public static class Key {
@@ -175,48 +161,22 @@ public class Car {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         Car car = (Car) o;
-        return year == car.year && numberOfSeats
-                == car.numberOfSeats && Double.compare(car.engineVolume, engineVolume)
-                == 0 && isSummerRubber
-                == car.isSummerRubber
-                && Objects.equals(brand, car.brand)
-                && Objects.equals(model, car.model)
-                && Objects.equals(country, car.country)
-                && Objects.equals(bodyType, car.bodyType)
-                && Objects.equals(color, car.color)
-                && Objects.equals(transmission, car.transmission)
-                && Objects.equals(registrationNumber, car.registrationNumber)
-                && Objects.equals(key, car.key);
+        return numberOfSeats == car.numberOfSeats && Double.compare(car.engineVolume, engineVolume) == 0 && isSummerRubber == car.isSummerRubber && Objects.equals(bodyType, car.bodyType) && Objects.equals(transmission, car.transmission) && Objects.equals(registrationNumber, car.registrationNumber) && Objects.equals(key, car.key);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(brand,
-                model,
-                year,
-                country,
-                bodyType,
-                numberOfSeats,
-                engineVolume,
-                color,
-                transmission,
-                registrationNumber,
-                isSummerRubber,
-                key);
+        return Objects.hash(super.hashCode(), bodyType, numberOfSeats, engineVolume, transmission, registrationNumber, isSummerRubber, key);
     }
 
     @Override
     public String toString() {
         return "Car{" +
-                "brand='" + brand + '\'' +
-                ", model='" + model + '\'' +
-                ", year=" + year +
-                ", country='" + country + '\'' +
-                ", bodyType='" + bodyType + '\'' +
+                "bodyType='" + bodyType + '\'' +
                 ", numberOfSeats=" + numberOfSeats +
                 ", engineVolume=" + engineVolume +
-                ", color='" + color + '\'' +
                 ", transmission='" + transmission + '\'' +
                 ", registrationNumber='" + registrationNumber + '\'' +
                 ", isSummerRubber=" + isSummerRubber +
